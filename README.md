@@ -147,6 +147,13 @@ targetElem.conclick=example.bind(target);//show"work", as bind() already change 
 -- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this
 
 * Explain how prototypal inheritance works
+
+javaScript在ES6之前没有显式类继承，所以要实现继承类，需要用prototype property.是继承实例（无法实现继承接口）
+
+child.prototype=Object.create(father.prototype);
+child.prototype.constructor=child;//constructor要指定给child, 否则指向的是father
+可以override methode
+
 * What do you think of AMD vs CommonJS?
 * Explain why the following doesn't work as an IIFE: `function foo(){ }();`.
   * What needs to be changed to properly make it an IIFE?
