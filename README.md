@@ -101,9 +101,11 @@ This file contains a number of front-end interview questions that can be used wh
 #### JS Questions:
 
 * Explain event delegation
-```based on event bubbling, the event is first captured and handled by target element and then propagated to outer elements(father). So event delegation is a handling that binds a event to the outer element rather than to each of its children elements. It's a easy way for event listener to manage.
-```
+
+based on event bubbling, the event is first captured and handled by target element and then propagated to outer elements(father). So event delegation is a handling that binds a event to the outer element rather than to each of its children elements. It's a easy way for event listener to manage.
+
 - eg: click<li>, delete it
+
 * add click to every <li>
 * add click listener to <ul>(recommend)
 
@@ -120,6 +122,7 @@ document.getElementsByTag("ul")[0].addEventListener("click", function(e) {
 });
 ```
 - reference:
+
   https://github.com/simongong/js-stackoverflow-highest-votes/blob/master/questions21-30/event-delegation.md
 * Explain how `this` works in JavaScript
 
