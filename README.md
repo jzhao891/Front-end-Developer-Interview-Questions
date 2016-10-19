@@ -101,14 +101,14 @@ This file contains a number of front-end interview questions that can be used wh
 #### JS Questions:
 
 * Explain event delegation
-based on event bubbling, the event is first captured and handled by target element and then propagated to outer elements(father). So event delegation is a handling that binds a event to the outer element rather than to each of its children elements. It's a easy way for event listener to manage.
-eg: click<li>, delete it
+```based on event bubbling, the event is first captured and handled by target element and then propagated to outer elements(father). So event delegation is a handling that binds a event to the outer element rather than to each of its children elements. It's a easy way for event listener to manage.
+```
+- eg: click<li>, delete it
 * add click to every <li>
 * add click listener to <ul>(recommend)
 
-在`<ul>`节点上添加event listener：
-
-```language-javascript
+```在`<ul>`节点上添加event listener：
+language-javascript
 // Get the element, add a click listener...
 document.getElementsByTag("ul")[0].addEventListener("click", function(e) {
     // e.target is the clicked element
@@ -141,7 +141,8 @@ targetElem.onclick=function(){
 }//show"imp"
 targetElem.conclick=example.bind(target);//show"work", as bind() already change the context from targetElem to target, so \this\ is object target.
 - reference:
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this
+-- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this
+
 * Explain how prototypal inheritance works
 * What do you think of AMD vs CommonJS?
 * Explain why the following doesn't work as an IIFE: `function foo(){ }();`.
