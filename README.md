@@ -101,7 +101,47 @@ This file contains a number of front-end interview questions that can be used wh
 #### JS Questions:
 
 * Explain event delegation
+based on event bubbling, the event is first captured and handled by target element and then propagated to outer elements(father). So event delegation is a handling that binds a event to the outer element rather than to each of its children elements. It's a easy way for event listener to manage.
+eg: click<li>, delete it
+* add click to every <li>
+* add click listener to <ul>(recommend)
+
+在`<ul>`节点上添加event listener：
+
+```language-javascript
+// Get the element, add a click listener...
+document.getElementsByTag("ul")[0].addEventListener("click", function(e) {
+    // e.target is the clicked element
+    // If it was a list item
+    if(e.target && e.target.nodeName == "LI") {
+        // List item found.  Do whatever you want.
+        console.log("List item ", e.target.id.replace("post-"), " was clicked!");
+    }
+});
+```
+- reference:
+  https://github.com/simongong/js-stackoverflow-highest-votes/blob/master/questions21-30/event-delegation.md
 * Explain how `this` works in JavaScript
+
+function example(){
+console.log(this.id);
+}
+function example2(e){
+console.log(e.id);
+}
+var targetElem = document.getElementById("imp");
+var target=document.getElementById("work");
+example();//show "undefinde", as example is a global function(直接调用的情况下), so \this\ is the obj of window. 
+targetElem.onclick=example;//show "imp", as example is a declared function in obj targetElem, so 通过object调用example，\this\ is targetElem.
+targetElem.onclick=function(){
+  return example();
+}//show "undefined", 因为example还是被直接调用了，\this\ is window
+targetElem.onclick=function(){
+  return example2(this);// \this\ is targetElem
+}//show"imp"
+targetElem.conclick=example.bind(target);//show"work", as bind() already change the context from targetElem to target, so \this\ is object target.
+- reference:
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this
 * Explain how prototypal inheritance works
 * What do you think of AMD vs CommonJS?
 * Explain why the following doesn't work as an IIFE: `function foo(){ }();`.
