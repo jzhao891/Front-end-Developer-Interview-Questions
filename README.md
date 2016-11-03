@@ -101,32 +101,287 @@ This file contains a number of front-end interview questions that can be used wh
 #### JS Questions:
 
 * Explain event delegation
+
+based on event bubbling, the event is first captured and handled by target element and then propagated to outer elements(father). So event delegation is a handling that binds a event to the outer element rather than to each of its children elements. It's a easy way for event listener to manage.
+
+eg: click'li', delete it
+
+* add click to every 'li'
+* add click listener to 'ul'(recommend)
+
+```在'ul'节点上添加event listener：
+language-javascript
+// Get the element, add a click listener...
+document.getElementsByTag("ul")[0].addEventListener("click", function(e) {
+    // e.target is the clicked element
+    // If it was a list item
+    if(e.target && e.target.nodeName == "LI") {
+        // List item found.  Do whatever you want.
+        console.log("List item ", e.target.id.replace("post-"), " was clicked!");
+    }
+});
+```
+reference:
+
+  https://github.com/simongong/js-stackoverflow-highest-votes/blob/master/questions21-30/event-delegation.md
 * Explain how `this` works in JavaScript
+
+function example(){
+
+console.log(this.id);
+
+}
+
+function example2(e){
+
+console.log(e.id);
+
+}
+
+var targetElem = document.getElementById("imp");
+
+var target=document.getElementById("work");
+
+example();//show "undefinde", as example is a global function(直接调用的情况下), so \this\ is the obj of window.
+
+targetElem.onclick=example;//show "imp", as example is a declared function in obj targetElem, so 通过object调用example，\this\ is targetElem.
+
+targetElem.onclick=function(){
+
+  return example();
+
+}//show "undefined", 因为example还是被直接调用了，\this\ is window
+
+targetElem.onclick=function(){
+
+  return example2(this);// \this\ is targetElem
+
+}//show"imp"
+
+targetElem.conclick=example.bind(target);//show"work", as bind() already change the context from targetElem to target, so \this\ is object target.
+
+- reference:
+
+-- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this
+
 * Explain how prototypal inheritance works
+
+javaScript在ES6之前没有显式类继承，所以要实现继承类，需要用prototype property.是继承实例（无法实现继承接口）
+
+child.prototype=Object.create(father.prototype);
+
+child.prototype.constructor=child;//constructor要指定给child, 否则指向的是father
+
+可以override methode
+
 * What do you think of AMD vs CommonJS?
+
+
 * Explain why the following doesn't work as an IIFE: `function foo(){ }();`.
   * What needs to be changed to properly make it an IIFE?
+
+  IIFE (Immediately Invoked Function Expression) is a JavaScript function that runs as soon as it is defined.
+
+  The first pair of parentheses (function(){...}) turns the code within (in this case, a function) into an expression, and the second pair of parentheses (function(){...})() calls the function that results from that evaluated expression.
+
 * What's the difference between a variable that is: `null`, `undefined` or undeclared?
   * How would you go about checking for any of these states?
+
+null is the null value of a variable;
+
+undefined is a declared variable without valuation
+
+undeclared will be shown when you use a variable without declaration ahead.
+
 * What is a closure, and how/why would you use one?
+
+In javascript, there is no private methods or variables. But in javascript, child can access variables of father, but father can't access variables of child.So we can apply this to implement closure that you can't access and modified its variables directly from outside.
+
+application:
+
+implement private variables and functions:
+
+var counter=(function(){
+
+  var privateCount=0;
+
+  function changeBy(val){
+
+    privateCount+=val;
+
+  }
+
+  return {
+
+    increase: function(){
+
+      changeBy(1);
+
+    }
+
+    decrease: function(){
+
+      changeBy(-1);
+
+    }
+
+    value: function(){
+
+      return privateCount;
+
+    }
+
+  }
+
+})();
+
+we get a counter, an object with three methods: increase,decrease,value.
+
+console.log(counter.value()); // logs 0
+
+counter.increment();
+
+counter.increment();
+
+console.log(counter.value()); // logs 2
+
+counter.decrement();
+
+console.log(counter.value()); // logs 1
+
 * What's a typical use case for anonymous functions?
+
+anonymous functions is invoked at runtime
+
+  * use anonymous functions in function expression.
+
+  * as a parameter passed to a function.
+
+console.log((function(){return "alert!";})());
+
+  * as a return
+
+  function getfunction(){
+
+    return function(){
+
+      alert("alert!");
+
+    }
+
+  }
+
 * How do you organize your code? (module pattern, classical inheritance?)
+
+
 * What's the difference between host objects and native objects?
+
+The native objects are sometimes referred to as “global objects” since they are the objects that JavaScript has made natively available for use.
+
+Below find the list of native object constructors that come pre-packaged with JavaScript:
+
+✴ Number() ✴ String() ✴ Boolean() ✴ Object() ✴ Array() ✴ Function() ✴ Date() ✴ RegExp() ✴ Error()
+✴ EvalError() ✴ RangeError() ✴ ReferenceError() ✴ SyntaxError() ✴ TypeError() ✴ URIError()
+
+Host objects are not part of the ECMAScript implementation, but are available as objects during execution. Of course, the availability and behavior of a host object depends completely on what the host environment provides. For example, in the web browser environment the window/head object and all of its containing objects (excluding what JavaScript provides) are considered host objects: user-defined object, BOM and DOM
+
 * Difference between: `function Person(){}`, `var person = Person()`, and `var person = new Person()`?
+
+  function Person(){} is function declaration.
+
+  var person = Person()， person is the obj returned by Person.
+
+  var person = new Person() is function constructor, person is a instance of class Person
+
+
 * What's the difference between `.call` and `.apply`?
+
+.call/.apply can be used for changing context of a function.
+
+.call(obj,parameter1[,parameter2,parameter3])
+
+.apply(obj,[parameter1,parameter2,parameter3,...])
+
 * Explain `Function.prototype.bind`.
+
+use bind to change context of a function(ES5)
+
+var targetElem = document.getElementById("imp");
+
+var target=document.getElementById("work");
+
+targetElem.conclick=fn.bind(target);//target will be the obj that be accessed by fn, not targetElem, as bind() already change the context from targetElem to target
+
+
 * When would you use `document.write()`?
-* What's the difference between feature detection, feature inference, and using the UA string?
+
+The write() method is mostly used for testing: If it is used after an HTML document is fully loaded, it will delete all existing HTML.
+
+When this method is not used for testing, it is often used to write some text to an output stream opened by the document.open(). Writing to a document that has already loaded without calling document.open() will automatically perform a document.open call. Once you have finished writing, it is recommended to call document.close(), to tell the browser to finish loading the page.
+
+* What's the difference between feature detection, feature inference, and using the User Agent string?
+
+Feature Detection is to verify if a feature works in a particular browser or not. The feature can be either a CSS property or a Java Script Method.
+
+Feature inference checks for a feature just like feature detection, but uses another function because it assumes it will also exist; eg: if x exists, we can assume that y exists.比如用document.getElementsByTagNameNS是否存在来判断是否是IE环境，以保证下面是用的feature是available的
+
+if you request a HTTP request to web server with a specific user agent, the responded contents and data related to this particular browser will  be displayed.
+
+feature detection reference:https://developer.mozilla.org/en-US/docs/Archive/Web/Browser_feature_detection
+
 * Explain Ajax in as much detail as possible.
+
+Ajax use XMLHttpRequest object to communicate with web server, send and receive information of Json,XML,HTML format. it's asynchronous, so it can do all of this without having to refresh the page. This lets you update portions of a page based upon user events
+
 * What are the advantages and disadvantages of using Ajax?
+
+advantage：it's asynchronous, so it can do all of this without having to refresh the page. This lets you update portions of a page based upon user events
+
+disadvantage：Security is less in AJAX application as all files are downloaded at client side;
+JavaScript disabled browsers cannot use the application
+
 * Explain how JSONP works (and how it's not really Ajax).
+  While it is not possible to make a typical AJAX request to a different origin, it is possible to include a <script> from a different origin.Using this method, JSONP is able to work around the same-origin policy.
+
+  A JSONP response is the callback function. A regular AJAX endpoint would simply respond with a string of JSON.A JSONP response, on the other hand, is actually an executable script that calls a designated JSONP callback function, passing a JSON string as a parameter.
+
+  The way a typical JSONP call works is like this:
+  1.create a new <script> tag using window.createElement(）
+  2.set the src attribute to the desired JSONP endpoint
+  3.add the <script> to the <head> of the DOM
+  4.once loaded, the script passes data to a local callback function
+
+  Limitation: Since a JSONP call is made by the inclusion of a script tag, requests are restricted to the HTTP GET method. There is no way to do a PUT or POST request with JSONP.
+
+  This is an implementation:
+
+    <script type="text/javascript">
+          function onCustomerLoaded(result, methodName) {
+              var html = '<ul>';
+              for (var i = 0; i < result.length; i++) {
+                  html += '<li>' + result[i] + '</li>';
+                }
+                html += '</ul>';
+                document.getElementById('divCustomers').innerHTML = html;
+              }
+    </script>
+    <script type="text/javascript" src="http://www.yiwuku.com/myService.aspx?jsonp=onCustomerLoaded"></script>
+    -- return with onCustomerLoaded([“customername1","customername2"]);
+
 * Have you ever used JavaScript templating?
   * If so, what libraries have you used?
 * Explain "hoisting".
+  Hoisting is JavaScript's default behavior of moving declarations to the top of function or global code. For that reason, it is recommended to always declare variables at the top of their scope (the top of global code and the top of function code)
 * Describe event bubbling.
+  event bubbling, the event is first captured and handled by target element and then propagated to outer elements(father).
 * What's the difference between an "attribute" and a "property"?
+  reference:http://lucybain.com/blog/2014/attribute-vs-property/
 * Why is extending built-in JavaScript objects not a good idea?
+  Changing the behaviour of an object that will only be used by your own code is fine. But when you change the behaviour of something that is also used by other code there is a risk you will break that other code.
+
+  When it comes adding methods to the object and array classes in javascript, the risk of breaking something is very high, due to how javascript works. Long years of experience have taught me that this kind of stuff causes all kinds of terrible bugs in javascript
 * Difference between document load event and document DOMContentLoaded event?
+  The DOMContentLoaded event is fired when the initial HTML document has been completely loaded and parsed, without waiting for stylesheets, images, and subframes to finish loading. A very different event load should be used only to detect a fully-loaded page. It is an incredibly popular mistake to use load where DOMContentLoaded would be much more appropriate, so be cautious.
 * What is the difference between `==` and `===`?
 * Explain the same-origin policy with regards to JavaScript.
 * Make this work:
@@ -152,6 +407,7 @@ duplicate([1,2,3,4,5]); // [1,2,3,4,5,1,2,3,4,5]
 * What is event loop?
   * What is the difference between call stack and task queue?
 * Explain the differences on the usage of `foo` between `function foo() {}` and `var foo = function() {}`
+
 
 #### Testing Questions:
 
